@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React from "react";
 
 export default function WinScreen({ score, total, onRestart }) {
@@ -55,3 +56,8 @@ const styles = {
     fontWeight: "bold",
   },
 };
+=======
+export default function WinPage(){
+    return <h1>Win</h1>
+}
+>>>>>>> Stashed changes
