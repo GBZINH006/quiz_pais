@@ -10,9 +10,27 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     "howler": "^2.2.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+=======
+    "react": "^18.2.0",
+    "react-confetti": "^6.4.0",
+    "react-dom": "^18.2.0",
+>>>>>>> Stashed changes
+=======
+    "react": "^18.2.0",
+    "react-confetti": "^6.4.0",
+    "react-dom": "^18.2.0",
+>>>>>>> Stashed changes
+=======
+    "react": "^18.2.0",
+    "react-confetti": "^6.4.0",
+    "react-dom": "^18.2.0",
+>>>>>>> Stashed changes
     "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
