@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -120,8 +119,4 @@ function Login() {
 }
 
 export default Login;
-=======
-export default function LoginPage(){
-    return <h1>Login</h1>
-}
->>>>>>> Stashed changes
+

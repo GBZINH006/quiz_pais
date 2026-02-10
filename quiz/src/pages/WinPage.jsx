@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,8 +61,4 @@ const styles = {
     fontWeight: "bold",
   },
 };
-=======
-export default function WinPage(){
-    return <h1>Win</h1>
-}
->>>>>>> Stashed changes
+

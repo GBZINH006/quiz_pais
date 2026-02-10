@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
 import { Routes, Route} from "react-router-dom"
 import LoginPage from './pages/LoginPage'
 import QuizPage from './pages/QuizPage'
