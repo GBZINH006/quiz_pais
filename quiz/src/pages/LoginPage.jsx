@@ -1,14 +1,18 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Login() {
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
+  const navigate = useNavigate();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Nome:", nome);
-    console.log("Senha:", senha);
-    alert("Login enviado");
+
+    // aqui poderia validar login
+    navigate("/quiz");
   };
 
   return (
