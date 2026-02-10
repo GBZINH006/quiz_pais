@@ -1,4 +1,4 @@
-import { Routes, Route, Link, NavLink } from "react-router-dom"
+import { Routes, Route} from "react-router-dom"
 import LoginPage from '../pages/LoginPage'
 import QuizPage from '../pages/QuizPage'
 import WinPage from '../pages/WinPage'
