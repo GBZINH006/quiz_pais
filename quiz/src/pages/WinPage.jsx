@@ -1,6 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function WinScreen({ score, total, onRestart }) {
+export default function WinScreen({ score, total }) {
+  const navigate = useNavigate();
+
   return (
     <div style={styles.container}>
       <h1 style={styles.title}>🎉 Parabéns! 🎉</h1>
@@ -13,8 +16,11 @@ export default function WinScreen({ score, total, onRestart }) {
         Pontuação: <strong>{score}</strong> / {total}
       </p>
 
-      <button style={styles.button} onClick={onRestart}>
-        Jogar novamente
+      <button
+        style={styles.button}
+        onClick={() => navigate("/")}
+      >
+        Voltar para o início
       </button>
     </div>
   );
