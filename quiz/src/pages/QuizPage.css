@@ -1,0 +1,111 @@
+/* FUNDO ANIMADO */
+.quiz-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #1f1f3a, #0d0d1a);
+  overflow: hidden;
+  position: relative;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* PARTICULAS FUNDO */
+.particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  bottom: 0;
+  width: 6px;
+  height: 6px;
+  background: #00f2ff;
+  border-radius: 50%;
+  animation: subir 1.5s linear forwards;
+}
+
+@keyframes subir {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-200px) scale(0);
+    opacity: 0;
+  }
+}
+
+/* CARD */
+.quiz-card {
+  width: 450px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(20, 20, 40, 0.8);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px #00f2ff88;
+  border: 2px solid #00f2ff;
+  text-align: center;
+  color: white;
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+/* EFEITO 3D */
+.quiz-card:hover {
+  transform: rotateX(5deg) rotateY(5deg);
+}
+
+/* Borda neon pulsando */
+.quiz-card {
+  animation: neon 2s infinite alternate;
+}
+
+@keyframes neon {
+  from {
+    box-shadow: 0 0 20px #00f2ff;
+  }
+  to {
+    box-shadow: 0 0 40px #ff00c8;
+  }
+}
+
+/* INFO */
+.top-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* PROGRESS BAR */
+.custom-progress .p-progressbar-value {
+  background: linear-gradient(90deg, #00f2ff, #ff00c8);
+}
+
+/* BOTÕES */
+.quiz-button {
+  width: 100%;
+  margin: 10px 0;
+  background: linear-gradient(90deg, #00f2ff, #ff00c8);
+  border: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.quiz-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #00f2ff;
+}
+
+/* SCORE */
+.score {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #00f2ff;
+}
