@@ -5,7 +5,8 @@ export default function useBackgroundMusic() {
   useEffect(() => {
     const audio = new Audio(musica);
     audio.loop = true;
-    audio.play();
+    audio.volume = 0.2;
+    audio.play().catch(() => {});
 
     return () => audio.pause();
   }, []);
