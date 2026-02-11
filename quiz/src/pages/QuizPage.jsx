@@ -1,138 +1,116 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { ProgressBar } from "primereact/progressbar";
+import { InputSwitch } from "primereact/inputswitch";
+import confetti from "canvas-confetti";
 import useBackgroundMusic from "../hooks/useBackgroundMusic";
 import './index.css'
 import correctSound from "../assets/sounds/Correct.mp3";
 import errorSound from "../assets/sounds/Erro.mp3";
+import music from "../assets/sounds/musica.mp3";
 
 export default function QuizPage() {
-  useBackgroundMusic();
   const navigate = useNavigate();
 
   const questions = [
-    { q: "Capital do Brasil?", o: ["Rio", "Brasília", "SP"], a: "Brasília" },
-    { q: "2 + 2 = ?", o: ["3", "4", "5"], a: "4" },
     { q: "React é?", o: ["Framework", "Biblioteca", "Linguagem"], a: "Biblioteca" },
-    { q: "HTML é?", o: ["Marcação", "Banco", "Lógica"], a: "Marcação" },
-    { q: "CSS serve pra?", o: ["Estilo", "Código", "Banco"], a: "Estilo" },
-    { q: "JS roda onde?", o: ["Browser", "Photoshop", "Word"], a: "Browser" },
-    { q: "Quem criou React?", o: ["Google", "Facebook", "Microsoft"], a: "Facebook" },
+    { q: "HTML é?", o: ["Marcação", "Banco", "API"], a: "Marcação" },
+    { q: "CSS serve pra?", o: ["Estilo", "Banco", "Servidor"], a: "Estilo" },
     { q: "useState é?", o: ["Hook", "Classe", "API"], a: "Hook" },
-    { q: "Vite é?", o: ["Bundler", "Banco", "Framework"], a: "Bundler" },
-    { q: "JS é?", o: ["Interpretado", "Compilado", "Assembly"], a: "Interpretado" },
+    { q: "JS roda onde?", o: ["Browser", "Excel", "Word"], a: "Browser" }
   ];
 
   const [i, setI] = useState(0);
   const [score, setScore] = useState(0);
+  const [dark, setDark] = useState(true);
   const [lock, setLock] = useState(false);
-  const [status, setStatus] = useState(null);
+  const [time, setTime] = useState(15);
+  const [muted, setMuted] = useState(false);
 
-  const correct = new Audio(correctSound);
-  const error = new Audio(errorSound);
+  const bgMusic = new Audio(music);
+  bgMusic.loop = true;
+  bgMusic.volume = 0.4;
+
+  useEffect(() => {
+    if (!muted) bgMusic.play();
+    else bgMusic.pause();
+  }, [muted]);
+
+  useEffect(() => {
+    if (time === 0) next();
+    const timer = setTimeout(() => setTime(t => t - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [time]);
+
+  function next() {
+    if (i + 1 < questions.length) {
+      setI(i + 1);
+      setTime(15);
+    } else {
+      navigate("/win", { state: { score } });
+    }
+  }
 
   function answer(opt) {
     if (lock) return;
     setLock(true);
 
-    const hit = opt === questions[i].a;
-    setStatus(hit ? "ok" : "err");
+    const correct = new Audio(correctSound);
+    const error = new Audio(errorSound);
 
-    hit ? correct.play() : error.play();
-    if (hit) setScore(s => s + 1);
+    const hit = opt === questions[i].a;
+
+    if (hit) {
+      setScore(s => s + 1);
+      correct.play();
+      confetti({ particleCount: 120, spread: 70 });
+    } else {
+      error.play();
+    }
 
     setTimeout(() => {
-      setStatus(null);
       setLock(false);
-      if (i + 1 < questions.length) setI(i + 1);
-      else navigate("/win", { state: { score: hit ? score + 1 : score } });
-    }, 700);
+      next();
+    }, 1000);
   }
 
   return (
-    <div style={styles.wrapper}>
-      <Card
-        title={`Pergunta ${i + 1} / ${questions.length}`}
-        subTitle={`Pontuação: ${score}`}
-        style={{
-          ...styles.card,
-          boxShadow:
-            status === "ok"
-              ? "0 0 40px #00ffae"
-              : status === "err"
-              ? "0 0 40px #ff4d6d"
-              : "0 25px 60px rgba(0,0,0,.5)"
-        }}
-      >
-        <ProgressBar
-          value={((i + 1) / questions.length) * 100}
-          style={styles.progress}
-        />
+    <div className={dark ? "quiz-wrapper dark" : "quiz-wrapper"}>
+      <Card className="quiz-card">
 
-        <h2 style={styles.question}>{questions[i].q}</h2>
+        <div className="quiz-top">
+          <span>Pergunta {i + 1}/{questions.length}</span>
 
-        <div style={styles.options}>
+          <div className="controls">
+            <i
+              className={`pi ${muted ? "pi-volume-off" : "pi-volume-up"}`}
+              onClick={() => setMuted(!muted)}
+            />
+            <InputSwitch checked={dark} onChange={(e) => setDark(e.value)} />
+          </div>
+        </div>
+
+        <ProgressBar value={(time / 15) * 100} className="timer-bar" />
+
+        <h2 className="question">{questions[i].q}</h2>
+
+        <div className="options">
           {questions[i].o.map(opt => (
             <Button
               key={opt}
               label={opt}
               disabled={lock}
               onClick={() => answer(opt)}
-              className="p-button-rounded p-button-lg"
-              style={styles.button}
+              className="p-button-rounded option-btn"
             />
           ))}
         </div>
+
+        <div className="score">Pontuação: {score}</div>
+
       </Card>
     </div>
   );
 }
-
-const styles = {
-  wrapper: {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg,#1e1e2f,#3b3b98,#6a11cb)",
-    backgroundSize: "400% 400%",
-    animation: "gradient 10s ease infinite",
-  },
-
-  card: {
-    width: 450,
-    borderRadius: 20,
-    padding: 10,
-    textAlign: "center",
-    backdropFilter: "blur(12px)",
-    background: "rgba(255,255,255,0.08)",
-    color: "white",
-    animation: "fadeIn .6s ease",
-    transition: "all .3s ease"
-  },
-
-  progress: {
-    height: 12,
-    marginBottom: 25,
-    borderRadius: 10
-  },
-
-  question: {
-    marginBottom: 25,
-    fontSize: "1.5rem",
-    fontWeight: 600
-  },
-
-  options: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 15
-  },
-
-  button: {
-    fontSize: "1rem",
-    transition: "transform .2s",
-  }
-};
