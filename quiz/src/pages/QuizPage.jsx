@@ -1,116 +1,115 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card } from "primereact/card";
-import { Button } from "primereact/button";
-import { ProgressBar } from "primereact/progressbar";
-import { InputSwitch } from "primereact/inputswitch";
-import confetti from "canvas-confetti";
-import useBackgroundMusic from "../hooks/useBackgroundMusic";
-import './index.css'
-import correctSound from "../assets/sounds/Correct.mp3";
-import errorSound from "../assets/sounds/Erro.mp3";
-import music from "../assets/sounds/musica.mp3";
+import { useState, useEffect } from "react"
+import { Button } from "primereact/button"
+import { ProgressBar } from "primereact/progressbar"
+import "./QuizPage.css"
 
 export default function QuizPage() {
-  const navigate = useNavigate();
 
-  const questions = [
-    { q: "React é?", o: ["Framework", "Biblioteca", "Linguagem"], a: "Biblioteca" },
-    { q: "HTML é?", o: ["Marcação", "Banco", "API"], a: "Marcação" },
-    { q: "CSS serve pra?", o: ["Estilo", "Banco", "Servidor"], a: "Estilo" },
-    { q: "useState é?", o: ["Hook", "Classe", "API"], a: "Hook" },
-    { q: "JS roda onde?", o: ["Browser", "Excel", "Word"], a: "Browser" }
-  ];
-
-  const [i, setI] = useState(0);
-  const [score, setScore] = useState(0);
-  const [dark, setDark] = useState(true);
-  const [lock, setLock] = useState(false);
-  const [time, setTime] = useState(15);
-  const [muted, setMuted] = useState(false);
-
-  const bgMusic = new Audio(music);
-  bgMusic.loop = true;
-  bgMusic.volume = 0.4;
-
-  useEffect(() => {
-    if (!muted) bgMusic.play();
-    else bgMusic.pause();
-  }, [muted]);
-
-  useEffect(() => {
-    if (time === 0) next();
-    const timer = setTimeout(() => setTime(t => t - 1), 1000);
-    return () => clearTimeout(timer);
-  }, [time]);
-
-  function next() {
-    if (i + 1 < questions.length) {
-      setI(i + 1);
-      setTime(15);
-    } else {
-      navigate("/win", { state: { score } });
+  const perguntas = [
+    {
+      pergunta: "React é?",
+      opcoes: ["Framework", "Biblioteca", "Linguagem"],
+      resposta: "Biblioteca"
+    },
+    {
+      pergunta: "Qual hook gerencia estado?",
+      opcoes: ["useFetch", "useState", "usePage"],
+      resposta: "useState"
+    },
+    {
+      pergunta: "JSX é?",
+      opcoes: ["HTML dentro do JS", "Banco de dados", "Servidor"],
+      resposta: "HTML dentro do JS"
     }
-  }
+  ]
 
-  function answer(opt) {
-    if (lock) return;
-    setLock(true);
+  const [indice, setIndice] = useState(0)
+  const [pontuacao, setPontuacao] = useState(0)
+  const [timer, setTimer] = useState(15)
 
-    const correct = new Audio(correctSound);
-    const error = new Audio(errorSound);
+  const perguntaAtual = perguntas[indice]
 
-    const hit = opt === questions[i].a;
+  useEffect(() => {
+    if (timer === 0) {
+      proximaPergunta()
+      return
+    }
 
-    if (hit) {
-      setScore(s => s + 1);
-      correct.play();
-      confetti({ particleCount: 120, spread: 70 });
-    } else {
-      error.play();
+    const intervalo = setInterval(() => {
+      setTimer((prev) => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(intervalo)
+  }, [timer])
+
+  function verificarResposta(opcao) {
+    if (opcao === perguntaAtual.resposta) {
+      setPontuacao(pontuacao + 1)
+      criarParticulas()
     }
 
     setTimeout(() => {
-      setLock(false);
-      next();
-    }, 1000);
+      proximaPergunta()
+    }, 800)
+  }
+
+  function proximaPergunta() {
+    if (indice < perguntas.length - 1) {
+      setIndice(indice + 1)
+      setTimer(15)
+    } else {
+      alert("Quiz Finalizado 🎉 Pontuação: " + pontuacao)
+    }
+  }
+
+  function criarParticulas() {
+    const container = document.querySelector(".particles")
+    for (let i = 0; i < 30; i++) {
+      const span = document.createElement("span")
+      span.className = "particle"
+      span.style.left = Math.random() * 100 + "%"
+      span.style.animationDelay = Math.random() * 1 + "s"
+      container.appendChild(span)
+      setTimeout(() => span.remove(), 1500)
+    }
   }
 
   return (
-    <div className={dark ? "quiz-wrapper dark" : "quiz-wrapper"}>
-      <Card className="quiz-card">
+    <div className="quiz-container">
 
-        <div className="quiz-top">
-          <span>Pergunta {i + 1}/{questions.length}</span>
+      <div className="particles"></div>
 
-          <div className="controls">
-            <i
-              className={`pi ${muted ? "pi-volume-off" : "pi-volume-up"}`}
-              onClick={() => setMuted(!muted)}
-            />
-            <InputSwitch checked={dark} onChange={(e) => setDark(e.value)} />
-          </div>
+      <div className="quiz-card">
+
+        <div className="top-info">
+          <span>Pergunta {indice + 1}/{perguntas.length}</span>
+          <span>⏳ {timer}s</span>
         </div>
 
-        <ProgressBar value={(time / 15) * 100} className="timer-bar" />
+        <ProgressBar 
+          value={(indice / perguntas.length) * 100}
+          showValue={false}
+          className="custom-progress"
+        />
 
-        <h2 className="question">{questions[i].q}</h2>
+        <h2>{perguntaAtual.pergunta}</h2>
 
-        <div className="options">
-          {questions[i].o.map(opt => (
+        <div className="opcoes">
+          {perguntaAtual.opcoes.map((opcao, i) => (
             <Button
-              key={opt}
-              label={opt}
-              disabled={lock}
-              onClick={() => answer(opt)}
-              className="p-button-rounded option-btn"
+              key={i}
+              label={opcao}
+              className="quiz-button"
+              onClick={() => verificarResposta(opcao)}
             />
           ))}
         </div>
 
-        <div className="score">Pontuação: {score}</div>
+        <div className="score">
+          Pontuação: {pontuacao}
+        </div>
 
-      </Card>
+      </div>
     </div>
-  );
+  )
 }
