@@ -6,11 +6,10 @@ import { ProgressBar } from "primereact/progressbar";
 import { InputSwitch } from "primereact/inputswitch";
 import confetti from "canvas-confetti";
 import useBackgroundMusic from "../hooks/useBackgroundMusic";
-import './index.css'
 import correctSound from "../assets/sounds/Correct.mp3";
 import errorSound from "../assets/sounds/Erro.mp3";
 import music from "../assets/sounds/musica.mp3";
-import { gerarPergunta } from "../services/opneAI";
+import { gerarPergunta } from "../services/openAI";
 
 
 
