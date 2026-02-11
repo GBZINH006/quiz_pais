@@ -1,29 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 function Login() {
   const [nome, setNome] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    // aqui poderia validar login
     navigate("/quiz");
   };
 
   return (
     <div className="container">
       <form className="login-box" onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <h1>Bem-vindo 👋</h1>
+        <p className="subtitle">Faça login para continuar</p>
 
         <div className="field">
           <label>Nome</label>
           <input
-            type="nome"
+            type="text"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
             required
@@ -43,7 +40,6 @@ function Login() {
         <button type="submit">Entrar</button>
       </form>
 
-      {/* CSS NO FIM DO COMPONENTE */}
       <style>
         {`
         * {
@@ -53,7 +49,6 @@ function Login() {
 
         body {
           margin: 0;
-          background: #f2f2f2;
         }
 
         .container {
@@ -61,56 +56,85 @@ function Login() {
           display: flex;
           justify-content: center;
           align-items: center;
+          background: radial-gradient(circle at top, #2a5298, #1e3c72 60%, #0f2027);
+          padding: 20px;
         }
 
         .login-box {
-          background: white;
-          padding: 32px;
-          width: 320px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(12px);
+          padding: 50px 40px;
+          width: 380px;
+          border-radius: 20px;
+          text-align: center;
+          color: #fff;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+          border: 1px solid rgba(255,255,255,0.15);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-box:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 25px 60px rgba(0,0,0,0.5);
         }
 
         .login-box h1 {
-          text-align: center;
-          margin-bottom: 24px;
+          margin-bottom: 10px;
+          font-size: 2.4rem;
+        }
+
+        .subtitle {
+          margin-bottom: 30px;
+          opacity: 0.85;
         }
 
         .field {
-          margin-bottom: 16px;
+          margin-bottom: 20px;
+          text-align: left;
         }
 
         .field label {
           display: block;
-          margin-bottom: 6px;
-          font-size: 14px;
+          margin-bottom: 8px;
+          font-size: 0.9rem;
+          opacity: 0.85;
         }
 
         .field input {
           width: 100%;
-          padding: 10px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
+          padding: 14px;
+          border-radius: 12px;
+          border: 1px solid rgba(255,255,255,0.2);
+          background: rgba(255,255,255,0.1);
+          color: #fff;
+          font-size: 1rem;
+          transition: all 0.3s ease;
         }
 
         .field input:focus {
           outline: none;
-          border-color: #2563eb;
+          border-color: #ffd700;
+          box-shadow: 0 0 0 3px rgba(255,215,0,0.2);
         }
 
         button {
           width: 100%;
-          padding: 12px;
-          background: #2563eb;
-          color: white;
+          padding: 14px;
+          margin-top: 10px;
+          font-size: 1.1rem;
+          border-radius: 12px;
           border: none;
-          border-radius: 8px;
-          font-size: 16px;
           cursor: pointer;
+          background: linear-gradient(45deg, #ffd700, #ffb300);
+          color: #000;
+          font-weight: bold;
+          transition: all 0.3s ease;
+          box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
         }
 
         button:hover {
-          background: #1e40af;
+          transform: translateY(-3px) scale(1.03);
+          box-shadow: 0 15px 35px rgba(255, 215, 0, 0.6);
         }
         `}
       </style>
@@ -119,4 +143,3 @@ function Login() {
 }
 
 export default Login;
-
