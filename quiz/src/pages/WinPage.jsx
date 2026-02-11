@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import confetti from "canvas-confetti";
 
 export default function WinScreen({ score, total }) {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    confetti({
+      particleCount: 200,
+      spread: 160,
+      origin: { y: 0.6 },
+    });
+  }, []);
 
   return (
     <div style={styles.container}>
@@ -61,4 +70,3 @@ const styles = {
     fontWeight: "bold",
   },
 };
-
