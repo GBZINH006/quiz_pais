@@ -10,6 +10,9 @@ import './index.css'
 import correctSound from "../assets/sounds/Correct.mp3";
 import errorSound from "../assets/sounds/Erro.mp3";
 import music from "../assets/sounds/musica.mp3";
+import { gerarPergunta } from "../services/opneAI";
+
+
 
 export default function QuizPage() {
   const navigate = useNavigate();
@@ -32,6 +35,15 @@ export default function QuizPage() {
   const bgMusic = new Audio(music);
   bgMusic.loop = true;
   bgMusic.volume = 0.4;
+
+  useEffect(() => {
+  async function carregarPergunta() {
+    const pergunta = await gerarPergunta();
+    console.log(pergunta);
+  }
+
+  carregarPergunta();
+}, []);
 
   useEffect(() => {
     if (!muted) bgMusic.play();
